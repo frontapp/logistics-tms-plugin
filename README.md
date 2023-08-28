@@ -1,27 +1,23 @@
-# React + TypeScript + Vite
+# Logistics TMS Sample Plugin
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+To test this plugin:
 
-Currently, two official plugins are available:
+1. In Front, create an app from the Developers settings page with a plugin sidebar feature.
+1. Point the plugin to http://127.0.0.1:5173/
+1. Add a context link feature that matches with the pattern S[6 digists]. For example, S123456 or S654321.
+1. In your terminal, clone this repository.
+1. Run `npm install` to install dependencies.
+1. Run `npm run dev` to start a development server.
+1. Create a `.env` file in the project directory and fill it with the contents of the **TMS Logistics Env** secure note in 1Password.
+1. In Front, add [context links](https://help.front.com/en/articles/2002) to the conversation with IDs S123456 and S654321.
+1. Open your plugin.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
+The plugin loads data from Airtable. If there is a context link on the conversation with ID S123456 or S654321, then the data for that record loads from Airtable.
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-   },
-```
-
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+Additional features include:
+* Switch between matching records with dropdown
+* Search for TMS records
+* Create a draft reply with relevant data from the TMS record
+* Attach documents to draft
+* View and add notes attached to record
