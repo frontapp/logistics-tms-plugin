@@ -101,10 +101,11 @@ function TMS() {
         }
 
         const data = await response.json();
+        const newRecordIds: string[] = [];
 
         data.records.forEach((record: TMSRecord) => {
-          if (lookupIds.includes(record.fields.ID)) {
-            setRecordIds(prevRecordIds => [...prevRecordIds, record.fields.ID]);
+          if (lookupIds.includes(record.fields.ID) && !recordIds.includes(record.fields.ID)) {
+            newRecordIds.push(record.fields.ID);
             setSelectedItemId(record.fields.ID);
             setEmptySearch(false);
             setRecordData(record.fields);
@@ -114,6 +115,7 @@ function TMS() {
           }
         });
 
+        setRecordIds(newRecordIds);
         setLoading(false);
       } catch (error) {
         console.error('Fetch error:', error);
