@@ -1,21 +1,6 @@
 import { FC, useState, useEffect } from 'react';
 import { useFrontContext, Message, PaginatedResults } from '../../providers/frontContext';
-import { File as UIFile, Button, Heading } from '@frontapp/ui-kit';
-
-enum FileTypesEnum {
-  ARCHIVE = 'ARCHIVE',
-  AUDIO = 'AUDIO',
-  CALENDAR = 'CALENDAR',
-  CODE = 'CODE',
-  EXCEL = 'EXCEL',
-  GENERIC = 'GENERIC',
-  IMAGE = 'IMAGE',
-  PDF = 'PDF',
-  POWERPOINT = 'POWERPOINT',
-  TEXT = 'TEXT',
-  VIDEO = 'VIDEO',
-  WORD = 'WORD'
-}
+import { File as UIFile, Button, Heading, FileTypesEnum } from '@frontapp/ui-kit';
 
 interface Document {
   id: string;
@@ -91,7 +76,7 @@ useEffect(() => {
 
           // Update the state with the result of the promises from the downloadAttachment method
           const updatedFiles = await Promise.all(attachmentPromises);
-          setConversationFiles(prevConversationFiles => [...prevConversationFiles, ...updatedFiles]);
+          setConversationFiles(updatedFiles);
         }
       }
     } catch (error) {
