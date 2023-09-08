@@ -42,7 +42,7 @@ interface Document {
 }
 
 function TMS() {
-  const tabs = ['Overview', 'Documents', 'Notes'];
+  const tabs = ['Overview', 'Documents', 'Notes'] as const;
   const context = useFrontContext();
   const [recordIds, setRecordIds] = useState<string[]>([]);
   const [selectedItemId, setSelectedItemId] = useState<string>('');
@@ -54,7 +54,7 @@ function TMS() {
   const [search, setSearch] = useState<string>('');
   const [emptySearch, setEmptySearch] = useState<boolean>(false);
   const [latestMessageId, setLatestMessageId] = useState<string | undefined>();
-  const [selectedTab, setSelectedTab] = useState<string>(tabs[0]);
+  const [selectedTab, setSelectedTab] = useState<typeof tabs[number]>(tabs[0]);
 
   const displayOrder = ['Customer', 'Account Number', 'PO Number', 'Status', 'Type', 'Flags', 'ETD', 'ETA', 'Carrier', 'Origin', 'Destination', 'Leg 1 Destination', 'Leg 1 ETA', 'Leg 2 Destination', 'Leg 2 ETA', 'Leg 3 Destination', 'Leg 3 ETA'];
   const contactDisplayOrder = ['Operations Manager', 'Key Account Manager', 'Broker'];
@@ -87,41 +87,6 @@ function TMS() {
     setNoMatch(true);
     setEmptySearch(false);
     setSelectedTab(tabs[0]);
-    const fetchData = async () => {
-      try {
-        const response = await fetch(`https://api.airtable.com/v0/${import.meta.env.VITE_BASE_ID}/${import.meta.env.VITE_TABLE_ID}`, {
-          method: 'GET',
-          headers: {
-            'Authorization': `Bearer ${import.meta.env.VITE_API_KEY}`
-          }
-        });
-
-        if (!response.ok) {
-          throw new Error('Error fetching TMS record data');
-        }
-
-        const data = await response.json();
-        const newRecordIds: string[] = [];
-
-        data.records.forEach((record: TMSRecord) => {
-          if (lookupIds.includes(record.fields.ID) && !recordIds.includes(record.fields.ID)) {
-            newRecordIds.push(record.fields.ID);
-            setSelectedItemId(record.fields.ID);
-            setEmptySearch(false);
-            setRecordData(record.fields);
-            setNoMatch(false);
-            setLoading(false);
-            return;
-          }
-        });
-
-        setRecordIds(newRecordIds);
-        setLoading(false);
-      } catch (error) {
-        console.error('Fetch error:', error);
-        setLoading(false);
-      }
-    };
 
     // Searches through conversation links to identify context links with the record pattern https://example.com/order/S123456
     const links: Link[] = context.conversation.links;
@@ -134,7 +99,7 @@ function TMS() {
           lookupIds.push(match[1]);
         }
       });
-      fetchData()
+      fetchData(lookupIds)
         .catch(console.error);
     } else {
       setNoMatch(true);
@@ -145,30 +110,65 @@ function TMS() {
 
   // Fetches internal note data (mocked through Airtable API)
   useEffect(() => {
-    const fetchNotes = async () => {
-      try {
-        const response = await fetch(`https://api.airtable.com/v0/${import.meta.env.VITE_BASE_ID}/${import.meta.env.VITE_NOTES_ID}`, {
-          method: 'GET',
-          headers: {
-            'Authorization': `Bearer ${import.meta.env.VITE_API_KEY}`
-          }
-        });
-
-        if (!response.ok) {
-          throw new Error('Failed to fetch notes');
-        }
-
-        const data = await response.json();
-        setNotesData(data.records);
-      } catch (error) {
-        console.error('Fetch error:', error);
-      }
-    };
-
     fetchNotes()
       .catch(console.error);
-
   }, [context]);
+
+  const fetchData = async (lookupIds) => {
+    try {
+      const response = await fetch(`https://api.airtable.com/v0/${import.meta.env.VITE_BASE_ID}/${import.meta.env.VITE_TABLE_ID}`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${import.meta.env.VITE_API_KEY}`
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error('Error fetching TMS record data');
+      }
+
+      const data = await response.json();
+      const newRecordIds: string[] = [];
+
+      data.records.forEach((record: TMSRecord) => {
+        if (lookupIds.includes(record.fields.ID) && !recordIds.includes(record.fields.ID)) {
+          newRecordIds.push(record.fields.ID);
+          setSelectedItemId(record.fields.ID);
+          setEmptySearch(false);
+          setRecordData(record.fields);
+          setNoMatch(false);
+          setLoading(false);
+          return;
+        }
+      });
+
+      setRecordIds(newRecordIds);
+      setLoading(false);
+    } catch (error) {
+      console.error('Fetch error:', error);
+      setLoading(false);
+    }
+  };
+
+  const fetchNotes = async () => {
+    try {
+      const response = await fetch(`https://api.airtable.com/v0/${import.meta.env.VITE_BASE_ID}/${import.meta.env.VITE_NOTES_ID}`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${import.meta.env.VITE_API_KEY}`
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch notes');
+      }
+
+      const data = await response.json();
+      setNotesData(data.records);
+    } catch (error) {
+      console.error('Fetch error:', error);
+    }
+  };
 
   // Handles the Reply button
   const onCreateDraftClick = () => {
