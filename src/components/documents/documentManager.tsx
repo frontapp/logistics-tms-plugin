@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from 'react';
+import { FC, useState, useEffect } from 'react';
 import { useFrontContext, Message, PaginatedResults } from '../../providers/frontContext';
 import { File as UIFile, Button, Heading } from '@frontapp/ui-kit';
 

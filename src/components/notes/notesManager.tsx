@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent } from 'react';
+import { useState } from 'react';
 import { Textarea, Button } from '@frontapp/ui-kit';
 
 interface Note {
@@ -12,7 +12,7 @@ interface Note {
 interface NotesManagerProps {
   notes: Note[];
   onAddNoteChange: (value: string) => void;
-  onAddNoteClick: (value: string) => void;
+  onAddNoteClick: () => void;
 }
 
 const NotesManager: React.FC<NotesManagerProps> = ({ notes, onAddNoteChange, onAddNoteClick }) => {
@@ -45,7 +45,7 @@ const NotesManager: React.FC<NotesManagerProps> = ({ notes, onAddNoteChange, onA
           }}
         />
         <Button type="secondary" onClick={() => {
-          onAddNoteClick(value);
+          onAddNoteClick();
           setValue('');
         }}>
           Add note

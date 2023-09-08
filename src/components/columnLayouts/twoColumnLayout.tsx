@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 
 interface TwoColumnLayoutProps {
   data: Record<string, any>; // Object of key-value pairs

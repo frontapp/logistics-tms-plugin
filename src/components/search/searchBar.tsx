@@ -1,9 +1,9 @@
-import React, { useState, ChangeEvent } from 'react';
+import { useState } from 'react';
 import { Input, Button, Paragraph } from '@frontapp/ui-kit';
 
 interface SearchBarProps {
   onSearchChange: (value: string) => void;
-  onSearchClick: (value: string) => void;
+  onSearchClick: (value?: string) => void;
   emptySearch: boolean;
 }
 
@@ -23,7 +23,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearchChange, onSearchClick, em
           }}
         />
         <Button type="secondary" onClick={() => {
-          onSearchClick(value);
+          onSearchClick();
           setValue('');
         }}>
           Search

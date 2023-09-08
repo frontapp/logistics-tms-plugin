@@ -1,4 +1,3 @@
-import React from 'react';
 import './App.css';
 import TMS from './components/TMS';
 import { useFrontContext } from './providers/frontContext';

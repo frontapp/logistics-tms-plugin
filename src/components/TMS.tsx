@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import { useFrontContext, Message, PaginatedResults, Link } from '../providers/frontContext';
-import {PluginLayout, PluginHeader, PluginFooter, Paragraph, Heading, Button, Tab, TabGroup, Task, Textarea, Select, SelectItem} from '@frontapp/ui-kit';
+import {PluginLayout, PluginHeader, PluginFooter, Button, Tab, TabGroup, Select, SelectItem} from '@frontapp/ui-kit';
 import TwoColumnLayout from './columnLayouts/twoColumnLayout';
 import DocumentManager from './documents/documentManager';
 import NotesManager from './notes/notesManager';
@@ -114,7 +114,7 @@ function TMS() {
       .catch(console.error);
   }, [context]);
 
-  const fetchData = async (lookupIds) => {
+  const fetchData = async (lookupIds: string[]) => {
     try {
       const response = await fetch(`https://api.airtable.com/v0/${import.meta.env.VITE_BASE_ID}/${import.meta.env.VITE_TABLE_ID}`, {
         method: 'GET',
@@ -218,7 +218,7 @@ function TMS() {
   };
 
   // Add a new note when user clicks Add Note button (mocked with Airtable API)
-  const onAddNoteClick = async (newNote: string) => {
+  const onAddNoteClick = async () => {
     if (newNote) {
       const newNoteObject = {
         fields: {
@@ -274,8 +274,8 @@ function TMS() {
   };
 
   // Search for a TMS record (mocked with Airtable API)
-  const onSearchClick = async (search: string) => {
-    if (search) {
+  const onSearchClick = async (recordId?: string) => {
+    if (search || recordId) {
       try {
         const response = await fetch(
           `https://api.airtable.com/v0/${import.meta.env.VITE_BASE_ID}/${import.meta.env.VITE_TABLE_ID}`,
@@ -293,7 +293,7 @@ function TMS() {
 
         const data = await response.json();
         const matchFound = data.records.some((record: TMSRecord) => {
-          if (record.fields.ID === search) {
+          if (record.fields.ID === search || record.fields.ID === recordId) {
             setSelectedItemId(record.fields.ID);
             setRecordData(record.fields);
             setNoMatch(false);
