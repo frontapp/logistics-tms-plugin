@@ -1,6 +1,6 @@
 import { FC, useState, useEffect } from 'react';
-import { useFrontContext, Message, PaginatedResults } from '../../providers/frontContext';
 import { File as UIFile, Button, Heading, FileTypesEnum } from '@frontapp/ui-kit';
+import { ApplicationMessageList, ApplicationMessageId, SingleConversationContext } from '@frontapp/plugin-sdk';
 
 interface Document {
   id: string;
@@ -12,13 +12,13 @@ interface Document {
 
 interface DocumentManagerProps {
   data: Document[];
+  context: SingleConversationContext;
 }
 
-const DocumentManager: FC<DocumentManagerProps> = ({ data }) => {
+const DocumentManager: FC<DocumentManagerProps> = ({ data, context }) => {
   // A component that renders attachments from an external system and from the current conversation
   // Allows the user to add attachments to the draft
-  const context = useFrontContext();
-  const [latestMessageId, setLatestMessageId] = useState<string | undefined>();
+  const [latestMessageId, setLatestMessageId] = useState<ApplicationMessageId | undefined>();
   const [conversationFiles, setConversationFiles] = useState<Document[]>([]);
 
   // Watches the context and selects the latest message ID from the available messages.
@@ -26,7 +26,7 @@ const DocumentManager: FC<DocumentManagerProps> = ({ data }) => {
   // If a message does not exist, buttons related to new message drafts are hidden
   useEffect(() => {
     context.listMessages()
-      .then((response: PaginatedResults<Message>) => {
+      .then((response: ApplicationMessageList) => {
         if (response.results.length > 0) {
           const latestMessageIndex = response.results.length - 1;
           setLatestMessageId(response.results[latestMessageIndex].id);

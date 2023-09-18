@@ -1,11 +1,12 @@
-import {createContext, useContext, useEffect, useState} from 'react';
+import {createContext, useContext, useEffect, useState, FC} from 'react';
+import {ConversationContext} from '@frontapp/plugin-sdk';
 import Front from '@frontapp/plugin-sdk';
 
 /*
  * Context.
  */
 
-export const FrontContext = createContext();
+export const FrontContext = createContext<ConversationContext | undefined>(undefined);
 
 /*
  * Hook.
@@ -19,12 +20,12 @@ export function useFrontContext() {
  * Component.
  */
 
-export const FrontContextProvider = ({children}) => {
-  const [context, setContext] = useState();
+export const FrontContextProvider: FC<{children: React.ReactElement}> = ({children}) => {
+  const [context, setContext] = useState<ConversationContext>();
 
   useEffect(() => {
     const subscription = Front.contextUpdates.subscribe(frontContext => {
-      setContext(frontContext);
+      setContext(frontContext as ConversationContext);
     })
     return () => subscription.unsubscribe();
   }, [])

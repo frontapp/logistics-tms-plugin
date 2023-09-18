@@ -23,7 +23,7 @@ function App() {
     case 'singleConversation':
       return (
         <div className="App">
-          <TMS />
+          <TMS context={context} />
         </div>
       );
     case 'multiConversations':

@@ -1,5 +1,5 @@
-import {useEffect, useState} from 'react';
-import { useFrontContext, Message, PaginatedResults, Link } from '../providers/frontContext';
+import {useEffect, useState, FC} from 'react';
+import {ApplicationLink, ApplicationMessageList, ApplicationMessageId, SingleConversationContext} from '@frontapp/plugin-sdk';
 import {PluginLayout, PluginHeader, PluginFooter, Button, Tab, TabGroup, Select, SelectItem} from '@frontapp/ui-kit';
 import TwoColumnLayout from './columnLayouts/twoColumnLayout';
 import DocumentManager from './documents/documentManager';
@@ -41,9 +41,8 @@ interface Document {
   type: string;
 }
 
-function TMS() {
+const TMS: FC<{context: SingleConversationContext}> = ({context}) => {
   const tabs = ['Overview', 'Documents', 'Notes'] as const;
-  const context = useFrontContext();
   const [recordIds, setRecordIds] = useState<string[]>([]);
   const [selectedItemId, setSelectedItemId] = useState<string>('');
   const [recordData, setRecordData] = useState<any>({});
@@ -53,7 +52,7 @@ function TMS() {
   const [newNote, setNewNote] = useState<string>('');
   const [search, setSearch] = useState<string>('');
   const [emptySearch, setEmptySearch] = useState<boolean>(false);
-  const [latestMessageId, setLatestMessageId] = useState<string | undefined>();
+  const [latestMessageId, setLatestMessageId] = useState<ApplicationMessageId | undefined>();
   const [selectedTab, setSelectedTab] = useState<typeof tabs[number]>(tabs[0]);
 
   const displayOrder = ['Customer', 'Account Number', 'PO Number', 'Status', 'Type', 'Flags', 'ETD', 'ETA', 'Carrier', 'Origin', 'Destination', 'Leg 1 Destination', 'Leg 1 ETA', 'Leg 2 Destination', 'Leg 2 ETA', 'Leg 3 Destination', 'Leg 3 ETA'];
@@ -68,7 +67,7 @@ function TMS() {
   // If a message does not exist, buttons related to new message drafts are hidden
   useEffect(() => {
     context.listMessages()
-      .then((response: PaginatedResults<Message>) => {
+      .then((response: ApplicationMessageList) => {
         if (response.results.length > 0) {
           const latestMessageIndex = response.results.length - 1;
           setLatestMessageId(response.results[latestMessageIndex].id);
@@ -89,8 +88,8 @@ function TMS() {
     setSelectedTab(tabs[0]);
 
     // Searches through conversation links to identify context links with the record pattern https://example.com/order/S123456
-    const links: Link[] = context.conversation.links;
-    let lookupIds: string[] = [];
+    const links: readonly ApplicationLink[] = context.conversation.links;
+    const lookupIds: string[] = [];
     if (links.length > 0) {
       links.map((link) => {
         // Adapt this lookup pattern for your TMS system
@@ -182,10 +181,6 @@ function TMS() {
         content: {
           body: `Hello ${recipient}! Order ${recordData['PO Number']} is ${recordData['Status']} and expected to arrive on ${recordData['ETA']}.`,
           type: 'text'
-        },
-        replyOptions: {
-          type: 'replyAll',
-          originalMessageId: latestMessageId
         }
       });
     } else {
@@ -354,7 +349,7 @@ function TMS() {
             </div>
           </div>
           <div id="Documents" className="Tab hidden">
-            {recordData.Documents && <DocumentManager data={recordData.Documents} />}
+            {recordData.Documents && <DocumentManager data={recordData.Documents} context={context} />}
           </div>
           <div id="Notes" className="Tab hidden">
             {notesData && <NotesManager notes={notesData} onAddNoteChange={onAddNoteChange} onAddNoteClick={onAddNoteClick} />}
