@@ -1,23 +1,17 @@
 # Logistics TMS Sample Plugin
 
-To test this plugin:
-
-1. In Front, create an app from the Developers settings page with a plugin sidebar feature.
-1. Point the plugin to http://127.0.0.1:5173/
-1. Add a context link feature that matches with the pattern S[6 digists]. For example, S123456 or S654321.
-1. In your terminal, clone this repository.
-1. Run `npm install` to install dependencies.
-1. Run `npm run dev` to start a development server.
-1. Create a `.env` file in the project directory and fill it with the contents of the **TMS Logistics Env** secure note in 1Password.
-1. In Front, add [context links](https://help.front.com/en/articles/2002) to the conversation with IDs S123456 and S654321.
-1. Open your plugin.
+This plugin demonstrates how to use the [Front Plugin SDK](https://dev.frontapp.com/docs/plugin-overview) to read and write data from an external system of record and display that additional context to the Front user. The example code demonstrates this within the context of reading data from a Transportation Management System (TMS) mocked in Airtable, effectively providing the Front user additional details about logistics shipments or transactions. You can adapt this code to a number of industries and use cases. To learn how to use this sample plugin, refer to the [tutorial](https://dev.frontapp.com/docs/logistics-tms-plugin) on the Front Developer Portal.
 
 ## Features
-The plugin loads data from Airtable. If there is a context link on the conversation with ID S123456 or S654321, then the data for that record loads from Airtable.
+The plugin loads data from Airtable. If there is a dynamic object on the conversation with ID S123456 or S654321 (example record-matching pattern for this sample code, but it can be adapted), then the data for that record loads from Airtable.
 
 Additional features include:
-* Switch between matching records with dropdown
-* Search for TMS records
-* Create a draft reply with relevant data from the TMS record
-* Attach documents to draft
-* View and add notes attached to record
+* Loads the [Front Plugin SDK](https://dev.frontapp.com/reference/installation) through React context
+* Reads data from a RESTful API and displays it in the Front sidebar
+* Implements the [Front UI Kit](https://dev.frontapp.com/docs/front-ui-kit) to save time developing UI components
+* Detects links attached to the selected Front conversation and loads record data related to those links
+* Allows the user to search for a specific record by ID
+* Lists documents attached to the record or conversation and allows users to attach those documents to the reply
+* Lists notes related to the record and allows users to add new notes
+* Drafts a reply to the recipient with pre-populated information (such as status and delivery date) from the external system
+* Implements the plugin using React, Vite, and TypeScript.
