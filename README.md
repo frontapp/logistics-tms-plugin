@@ -1,6 +1,9 @@
 # Logistics TMS Sample Plugin
 
-This plugin demonstrates how to use the [Front Plugin SDK](https://dev.frontapp.com/docs/plugin-overview) to read and write data from an external system of record and display that additional context to the Front user. The example code demonstrates this within the context of reading data from a Transportation Management System (TMS) mocked in Airtable, effectively providing the Front user additional details about logistics shipments or transactions. You can adapt this code to a number of industries and use cases. To learn how to use this sample plugin, refer to the [tutorial](https://dev.frontapp.com/docs/logistics-tms-plugin) on the Front Developer Portal.
+This plugin demonstrates how to use the [Front Plugin SDK](https://dev.frontapp.com/docs/plugin-overview) to read and write data from an external system of record and display that additional context to the Front user. The example code demonstrates this within the context of reading data from a Transportation Management System (TMS) mocked in Airtable, effectively providing the Front user additional details about logistics shipments or transactions. You can adapt this code to a number of industries and use cases.
+
+## Tutorial
+To learn how to use this sample plugin, refer to the [tutorial](https://dev.frontapp.com/docs/logistics-tms-plugin) on the Front Developer Portal.
 
 ## Features
 The plugin loads data from Airtable. If there is a dynamic object on the conversation with ID S123456 or S654321 (example record-matching pattern for this sample code, but it can be adapted), then the data for that record loads from Airtable.
