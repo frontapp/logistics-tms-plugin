@@ -1,27 +1,17 @@
-# React + TypeScript + Vite
+# Logistics TMS Sample Plugin
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This plugin demonstrates how to use the [Front Plugin SDK](https://dev.frontapp.com/docs/plugin-overview) to read and write data from an external system of record and display that additional context to the Front user. The example code demonstrates this within the context of reading data from a Transportation Management System (TMS) mocked in Airtable, effectively providing the Front user additional details about logistics shipments or transactions. You can adapt this code to a number of industries and use cases. To learn how to use this sample plugin, refer to the [tutorial](https://dev.frontapp.com/docs/logistics-tms-plugin) on the Front Developer Portal.
 
-Currently, two official plugins are available:
+## Features
+The plugin loads data from Airtable. If there is a dynamic object on the conversation with ID S123456 or S654321 (example record-matching pattern for this sample code, but it can be adapted), then the data for that record loads from Airtable.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-   },
-```
-
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+Additional features include:
+* Loads the [Front Plugin SDK](https://dev.frontapp.com/reference/installation) through React context
+* Reads data from a RESTful API and displays it in the Front sidebar
+* Implements the [Front UI Kit](https://dev.frontapp.com/docs/front-ui-kit) to save time developing UI components
+* Detects links attached to the selected Front conversation and loads record data related to those links
+* Allows the user to search for a specific record by ID
+* Lists documents attached to the record or conversation and allows users to attach those documents to the reply
+* Lists notes related to the record and allows users to add new notes
+* Drafts a reply to the recipient with pre-populated information (such as status and delivery date) from the external system
+* Implements the plugin using React, Vite, and TypeScript.
